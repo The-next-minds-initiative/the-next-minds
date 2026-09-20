@@ -108,6 +108,7 @@ function DashboardLayoutContent({
   const [location, setLocation] = useLocation();
   const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";
+  const [isCollapsedMenuOpen, setIsCollapsedMenuOpen] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const activeMenuItem = menuItems.find(item => item.path === location);
@@ -116,6 +117,8 @@ function DashboardLayoutContent({
   useEffect(() => {
     if (isCollapsed) {
       setIsResizing(false);
+    } else {
+      setIsCollapsedMenuOpen(false);
     }
   }, [isCollapsed]);
 
@@ -158,14 +161,43 @@ function DashboardLayoutContent({
           disableTransition={isResizing}
         >
           <SidebarHeader className="h-16 justify-center">
-            <div className="flex items-center gap-3 px-2 transition-all w-full">
+            <div className="group/collapse relative flex items-center gap-3 px-2 transition-all w-full">
               <button
                 onClick={toggleSidebar}
+                onMouseDown={() => setIsCollapsedMenuOpen(open => !open)}
                 className="h-8 w-8 flex items-center justify-center hover:bg-accent rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring shrink-0"
                 aria-label="Toggle navigation"
+                aria-expanded={isCollapsedMenuOpen}
               >
                 <PanelLeft className="h-4 w-4 text-muted-foreground" />
               </button>
+              {isCollapsed && (
+                <div
+                  className={`absolute left-11 top-0 z-50 min-w-44 rounded-lg border bg-popover p-1 shadow-lg ${
+                    isCollapsedMenuOpen ? "block" : "hidden group-hover/collapse:block"
+                  }`}
+                  onMouseDown={event => event.stopPropagation()}
+                >
+                  {menuItems.map(item => {
+                    const isActive = location === item.path;
+                    return (
+                      <button
+                        key={item.path}
+                        onClick={() => {
+                          setLocation(item.path);
+                          setIsCollapsedMenuOpen(false);
+                        }}
+                        className={`flex h-10 w-full items-center gap-2 rounded-md px-3 text-left text-sm transition-colors hover:bg-accent ${
+                          isActive ? "bg-accent font-medium text-accent-foreground" : "text-muted-foreground"
+                        }`}
+                      >
+                        <item.icon className="h-4 w-4 shrink-0" />
+                        <span>{item.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="font-semibold tracking-tight truncate">
@@ -176,7 +208,7 @@ function DashboardLayoutContent({
             </div>
           </SidebarHeader>
 
-          <SidebarContent className="gap-0">
+          <SidebarContent className={isCollapsed ? "hidden" : "gap-0"}>
             <SidebarMenu className="px-2 py-1">
               {menuItems.map(item => {
                 const isActive = location === item.path;
