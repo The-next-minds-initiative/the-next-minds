@@ -4,7 +4,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { adminInvites, auditLogs, emailConfig, emailLogs, emailMedia, emailTemplates, InsertUser, notificationPreferences, notifications, registrations, users } from "../drizzle/schema.js";
 import { ENV } from './_core/env.js';
-import { DEFAULT_BODY, DEFAULT_HTML, decryptProviderKey } from "./email.js";
+import { DEFAULT_BODY, DEFAULT_HTML } from "./email.js";
 let _db: ReturnType<typeof drizzle> | null = null;
 // `prepare: false` is required when connecting through Supabase's Supavisor
 // transaction-mode pooler (the 6543 connection string) — that pooler does
