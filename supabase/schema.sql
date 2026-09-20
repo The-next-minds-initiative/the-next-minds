@@ -71,8 +71,6 @@ create table "emailConfig" (
   "senderName" varchar(160) not null,
   "senderEmail" varchar(320) not null,
   "replyTo" varchar(320),
-  "provider" varchar(80) not null default 'gmail',
-  "apiKeyEncrypted" text,
   "gmailClientIdEncrypted" text,
   "gmailClientSecretEncrypted" text,
   "gmailRefreshTokenEncrypted" text,
@@ -115,6 +113,7 @@ create table "emailLogs" (
   "status" "email_log_status" not null,
   "failureReason" text,
   "providerMessageId" varchar(240),
+  "idempotencyKey" varchar(200),
   "retryOf" integer,
   "sentBy" integer,
   "createdAt" timestamp not null default now()

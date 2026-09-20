@@ -8,6 +8,6 @@ export const ENV = {
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
   firebaseProjectId: process.env.FIREBASE_PROJECT_ID ?? "",
   firebaseApiKey: process.env.FIREBASE_API_KEY ?? "",
-  manusEmailAutomationUrl: process.env.MANUS_EMAIL_AUTOMATION_URL ?? "",
-  manusEmailAutomationKey: process.env.MANUS_EMAIL_AUTOMATION_KEY ?? "",
+  brevoApiKey: process.env.BREVO_API_KEY ?? "",
+  publicAppUrl: (process.env.PUBLIC_APP_URL ?? "https://the-next-minds.vercel.app").replace(/\/+$/, ""),
 };
